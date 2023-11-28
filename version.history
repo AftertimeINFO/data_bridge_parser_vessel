@@ -1,0 +1,7 @@
+v.0.4.0
+ - clear rudimentary files
+ - clear rudimentary code
+ - add executing  interruption
+ - reconfig using chromedriver_autoinstaller as a local library
+ - Make using run parameters
+ - Make using trace region parameter
