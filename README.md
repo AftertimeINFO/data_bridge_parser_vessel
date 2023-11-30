@@ -13,3 +13,8 @@ git clone --recurse-submodules https://github.com/AftertimeINFO/data_bridge_pars
 pip install poetry
 poetry install
 ```
+
+#### Run parser
+```commandline
+poetry run python MarineTraffic.py --start --trace WORLD
+```

@@ -5,7 +5,7 @@ from selenium import webdriver
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.chrome.service import Service
 
-import chromedriver_autoinstaller
+import chromedriver_auto_installer
 
 def sel_connection():
     chrome_options = webdriver.ChromeOptions()
@@ -44,7 +44,7 @@ def sel_connection():
     # service_obj = Service(r"d:\FILES\Bukovel\OneDrive\Projects\Aftertime\Development\BackEND\parser_vessel\utility\cd\119_chromedriver.exe")
     # driver = webdriver.Chrome(options=chrome_options,
     #                           service=service_obj)
-    chromedriver_autoinstaller.install(path="./utility/chrome_driver")
+    chromedriver_auto_installer.install(path="./utility/chrome_driver")
     driver = webdriver.Chrome(options=chrome_options)
 
     time.sleep(2)
