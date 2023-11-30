@@ -9,7 +9,7 @@ readme = "README.md"
 python = "^3.10"
 selenium = "^4.15.2"
 requests = "^2.31.0"
-chromedriver-autoinstaller = {path = "lib/chromedriver-autoinstaller", develop = true}
+chromedriver-auto-installer = {path = "lib/chromedriver_auto_installer"}
 
 
 [build-system]
