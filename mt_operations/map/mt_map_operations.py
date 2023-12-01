@@ -1,4 +1,5 @@
 # region Standard libraries
+import asyncio
 import requests
 import time
 import json
@@ -169,19 +170,77 @@ class Operation:
             if self.structure["direction_condition"] is None or self.structure["direction_condition"] == direction:
                 import concurrent.futures as lib_cf
 
-                def sent_to_server(input_json, exec_info):
+                # operation_list = []
+                # sended = 0
+                # async def sent_to_server(input_json, exec_info):
+                #     print("Send id:", exec_info)
+                #     url = f"http://{SYNC_HOST_NAME}/api/v1/back/vehicle/ship"
+                #     r = requests.post(url, json=json.loads(input_json))
+                #     if r.status_code == 200:
+                #         return 1
+                #     else:
+                #         return 0
+                #     pass
+                #
+                # async def gather_request():
+                #     sended = 0
+                #     errors = 0
+                #     elem_i = 1
+                #     for ship_id, ship_data in vehicles.items():
+                #         operation_list.append(
+                #             sent_to_server(ship_data.get_json(), f"\rSending {elem_i}/{len(vehicles.items())} element"))
+                #         elem_i += 1
+                #         # executor.submit(sent_to_server, ship_data.get_json(), f"\rSending {elem_i}/{len(vehicles.items())} element")
+                #     print("Elements to send:", elem_i)
+                #     result = await asyncio.gather(*operation_list)
+                #     for cur_result in result:
+                #         if cur_result == 1:
+                #             sended += 1
+                #         else:
+                #             errors += 1
+                #     print("Sending results. Sended:", sended, " Errors:", errors)
+                #     return 780;
+                #
+                # loop = asyncio.get_event_loop()
+                # print("Start sending.")
+                # rr = loop.run_until_complete(gather_request())
+                #
+                # pass
+
+                class Calculation:
+                    __slots__ = ("sended", "errors")
+                    def __init__(self):
+                        self.sended = 0
+                        self.errors = 0
+
+                    def increase_send(self):
+                        self.sended += 1
+
+                    def increase_error(self):
+                        self.errors += 1
+
+                calculation = Calculation();
+
+                def sent_to_server(input_json, exec_info, calculation: Calculation):
                     print("", end=exec_info)
                     url = f"http://{SYNC_HOST_NAME}/api/v1/back/vehicle/ship"
                     r = requests.post(url, json=json.loads(input_json))
+                    if r.status_code == 200:
+                        calculation.increase_send()
+                    else:
+                        calculation.increase_error()
 
                 with lib_cf.ThreadPoolExecutor(max_workers=200) as executor:
                     elem_i = 1
                     for ship_id, ship_data in vehicles.items():
 
-                        executor.submit(sent_to_server, ship_data.get_json(), f"\rSending {elem_i}/{len(vehicles.items())} element")
+                        executor.submit(sent_to_server, ship_data.get_json(), f"\rSending {elem_i}/{len(vehicles.items())} element", calculation)
                         # print(f"Sending {elem_i}/{len(vehicles.items())} element")
                         elem_i += 1
-
+                print()
+                print("Sending results. Sended:", calculation.sended, " Errors:", calculation.errors)
+                if calculation.errors > 0:
+                    write_log("Errors on sending: ", calculation.errors)
                 vehicles = []
             print('End of sending')
         elif self.structure["operation_type"] == 4:
@@ -241,7 +300,10 @@ class MapOperationsList:
             self.direction_next = self.direction*-1
             self.passage_id_next = self.passage_id+1
 
-        return Operation(self.operations[self._position-1], self)
+        if self._position == 0:
+            return Operation(self.operations[0], self)
+        else:
+            return Operation(self.operations[self._position-1], self)
 
     def __init__(self):
         self.operations = []
@@ -373,6 +435,7 @@ class MapOperationsList:
                 else:
                     # TODO Hidden ship
                     pass
+
         print(f"Log contains {len(logs_raw)} lines. "
               f"Total log vehicles: {len(vehicle_map_elements)}. "
               f"Number of vehicles:{len(self.vehicles.items())}.")

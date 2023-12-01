@@ -1,4 +1,9 @@
 v.0.4.1
+ - fix clearing vessels error
+ - add logging on error sending
+ - add more information of executing
+
+v.0.4.1
  - change library chromedriver_autoinstaller to chromedriver_auto_installer
 
 v.0.4.0

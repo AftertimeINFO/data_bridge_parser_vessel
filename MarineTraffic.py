@@ -114,6 +114,9 @@ def run_parser(start_parsing: bool, trace_name: str = None):
                     MOL.initialize(trace_name=trace_name)
 
                     for cur_step in MOL:
+                        print("Operation type: ", cur_step.structure["operation_type"])
+                        if cur_step.structure["operation_type"] == 0:
+                            pass
                         cur_step.execute()
 
                 except StopIteration as e:
