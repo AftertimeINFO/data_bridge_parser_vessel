@@ -6,13 +6,12 @@ from datetime import datetime
 # endregion
 
 # region External libraries
+
 # endregion
 
 # region Project internal libraries
 from mt_operations.map.mt_map_operations import MapOperationsList
 # endregion
-
-
 
 
 class bcolors:
@@ -51,7 +50,7 @@ def run_parser(start_parsing: bool, trace_name: str = None):
 
         while input_data != "e" and input_data != "s":
             input_data = input("(s-start, sv-save, b-back, r-repeat, zi/zo-zoom in/out,"
-                               "l-list,  a-append, cr-Coordinates renew, e-exit):")
+                               "l-list,  a-append, ec-edit with check, cr-Coordinates renew, e-exit):")
 
             if input_data == "l":
                 list_operation()

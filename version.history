@@ -1,3 +1,6 @@
+v.0.4.2
+ - add using .env
+
 v.0.4.1
  - fix clearing vessels error
  - add logging on error sending

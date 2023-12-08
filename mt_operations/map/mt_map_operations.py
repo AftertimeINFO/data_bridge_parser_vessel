@@ -4,12 +4,14 @@ import requests
 import time
 import json
 import pprint
+import os
 from datetime import datetime
 # endregion
 
 # region External libraries
 from selenium import webdriver
 from selenium.webdriver.common.by import By
+from dotenv import load_dotenv
 # endregion
 
 # region Project internal libraries
@@ -17,8 +19,9 @@ import general
 from vehicle import Vehicle
 # endregion
 
-# SYNC_HOST_NAME = "localhost:8000"
-SYNC_HOST_NAME = "sync.api.aftertime.info"
+load_dotenv()
+
+API_SHIP_SERVER = os.environ.setdefault('API_SHIP_SERVER', 'localhost:8800')
 
 class bcolors:
     HEADER = '\033[95m'
@@ -174,7 +177,7 @@ class Operation:
                 # sended = 0
                 # async def sent_to_server(input_json, exec_info):
                 #     print("Send id:", exec_info)
-                #     url = f"http://{SYNC_HOST_NAME}/api/v1/back/vehicle/ship"
+                #     url = f"http://{API_SHIP_SERVER}/api/v1/back/vehicle/ship"
                 #     r = requests.post(url, json=json.loads(input_json))
                 #     if r.status_code == 200:
                 #         return 1
@@ -223,12 +226,16 @@ class Operation:
 
                 def sent_to_server(input_json, exec_info, calculation: Calculation):
                     print("", end=exec_info)
-                    url = f"http://{SYNC_HOST_NAME}/api/v1/back/vehicle/ship"
-                    r = requests.post(url, json=json.loads(input_json))
-                    if r.status_code == 200:
-                        calculation.increase_send()
-                    else:
+                    url = f"http://{API_SHIP_SERVER}/api/v1/back/vehicle/ship"
+                    try:
+                        r = requests.post(url, json=json.loads(input_json))
+                    except BaseException as e:
                         calculation.increase_error()
+                    else:
+                        if r.status_code == 200:
+                            calculation.increase_send()
+                        else:
+                            calculation.increase_error()
 
                 with lib_cf.ThreadPoolExecutor(max_workers=200) as executor:
                     elem_i = 1
