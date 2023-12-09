@@ -1,3 +1,6 @@
+v.0.4.4
+ - add ignoring chrome_driver files
+
 v.0.4.3
  - fix bug end pulling on sending error
 
