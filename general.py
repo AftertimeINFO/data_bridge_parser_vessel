@@ -44,9 +44,11 @@ def sel_connection():
     # service_obj = Service(r"d:\FILES\Bukovel\OneDrive\Projects\Aftertime\Development\BackEND\parser_vessel\utility\cd\119_chromedriver.exe")
     # driver = webdriver.Chrome(options=chrome_options,
     #                           service=service_obj)
+    print("Loading driver")
     chromedriver_auto_installer.install(path="./utility/chrome_driver")
+    time.sleep(5)
+    print("Create driver")
     driver = webdriver.Chrome(options=chrome_options)
-
-    time.sleep(2)
+    time.sleep(10)
 
     return driver

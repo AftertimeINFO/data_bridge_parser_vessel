@@ -120,7 +120,7 @@ class Operation:
         initialized = self.map_operations.initialized
 
         if initialized is None or initialized is False and self.structure["operation_type"] != 0:
-            write_log("ERROR: Can't do operation without initialization.");
+            write_log("ERROR: Can't do operation without initialization.")
             raise Exception("Can't do operation without initialization.")
 
         if self.structure["operation_type"] == 0 and self.map_operations.initialized is False:
@@ -144,7 +144,7 @@ class Operation:
             finally:
                 action.release().perform()
 
-            time.sleep(1)
+            time.sleep(2)
 
             self._renew_posision()
             self._check_fix_position()
@@ -247,7 +247,7 @@ class Operation:
                 print()
                 print("Sending results. Sended:", calculation.sended, " Errors:", calculation.errors)
                 if calculation.errors > 0:
-                    write_log("Errors on sending: ", calculation.errors)
+                    write_log("Errors on sending: " + str(calculation.errors))
                 vehicles = []
             print('End of sending')
         elif self.structure["operation_type"] == 4:
@@ -328,6 +328,7 @@ class MapOperationsList:
     # endregion
 
     def close_driver(self):
+        print("Closing driver:")
         if self.driver is not None:
             try:
                 self.driver.close()
@@ -337,6 +338,7 @@ class MapOperationsList:
         self.operations = []
 
     def initialize(self, trace_name:str = None, full:bool=True, reload:bool=True):
+        print("Initialize:", self.driver)
         if full is True:
             if self.driver is None:
                 self.driver = general.sel_connection()
@@ -344,8 +346,9 @@ class MapOperationsList:
             self.load_trace(trace_name=trace_name)
 
     def open_position(self, lat, lon, zoom):
+        print("opening web")
         self.driver.get(f"https://www.marinetraffic.com/en/ais/home/centerx:{lon}/centery:{lat}/zoom:{zoom}")
-        time.sleep(3)
+        time.sleep(10)
         try:
             agree_button = self.driver.find_element(By.XPATH, "//div[@class='qc-cmp2-summary-buttons']/button[@mode='primary']")
         except:

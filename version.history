@@ -1,3 +1,6 @@
+v.0.4.3
+ - fix bug end pulling on sending error
+
 v.0.4.2
  - add using .env
 
